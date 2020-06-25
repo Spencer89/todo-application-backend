@@ -19,10 +19,6 @@ app.use(bodyParser.json());
 //GET - COMPLETE
 app.get("/tasks", function (req, res) {
 
-  //const hardCodedTasks = [
-  // { text: "water plants", completed: true, date: "2020-04-04", id: 1 },
-  // { text: "do dishes", completed: true, date: "2020-04-04", id: 2 },
-  //{ text: "buy oats", completed: true, date: "2020-04-04", id: 3 }]
 
   const query = "SELECT * FROM postits;"
   connection.query(query, function (error, data) {
@@ -38,25 +34,51 @@ app.get("/tasks", function (req, res) {
     }
   });
 
-  //res.status(200).send(hardCodedTasks);
 });
 
 
 //DELETE
-app.delete("/tasks/:taskId", function (request, response) {
+//app.delete("/tasks/:taskId", function (request, response) {
 
-  const taskId = request.params.taskId
-  const someResponse = { message: `You have issued a delete request for takd Id ${taskId}` }
+//const taskId = request.params.taskId
 
-  response.json(someResponse);
-
+const query = "DELETE FROM postits (postitText, userId, completed) VALUES (?, ?, ?);";
+connection.query(query, function (error, data) {
+  if (error) {
+    console.log("Error deleting tasks", error);
+    response.status(500).json({
+      error: error
+    })
+  } else {
+    response.status(201).json({
+      tasks: data
+    })
+  }
 });
 
 
+  // app.delete("/tasks/:taskId", function(req, res) {
+  //   const query = "DELETE FROM postits WHERE postitId = ?";
+  //   connection.query(query, [req.params.postitId], function(error){
+  //     if (error){
+  //       console.log("Error deleting task", error);
+  //       res.status(500).json({
+  //         error: error
+  //       });
+  //     } else {
+  //       res.sendStatus(201)
+  //     }
+  //   });
+  // });
 
-//const body = {postitText:"Go to Tesco",
-// userId: 1,
-//completed: false};
+
+
+  //const someResponse = { message: `You have issued a delete request for takd Id ${taskId}` }
+ // response.json(someResponse);
+
+//});
+
+
 
 //POST
 app.post("/tasks", function (req, res) {
@@ -70,18 +92,17 @@ app.post("/tasks", function (req, res) {
         res.status(500).json({ error: error })
       }
       else {
-       connection.query(querySelect, [data.insertId], function(error,data){
-         if(error){console.log("Error creating task", error)
-         res.status(500).json({ error: error })}
-         else(
-           res.status(201).json({task:data})
-         )
-       })    
-       }
+        connection.query(querySelect, [data.insertId], function (error, data) {
+          if (error) {
+            console.log("Error creating task", error)
+            res.status(500).json({ error: error })
+          }
+          else (
+            res.status(201).json({ task: data })
+          )
+        })
+      }
     })
-
-  //const taskToAdd = req.body;
-  //res.json({ message: "You have added a task", task: taskToAdd, taskText: taskToAdd.text });
 
 });
 
