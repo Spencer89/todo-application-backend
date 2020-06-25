@@ -39,9 +39,9 @@ app.get("/tasks", function (req, res) {
 
 
 //DELETE
-//app.delete("/tasks/:taskId", function (request, response) {
+app.delete("/tasks/:taskId", function (request, response) {
 
-//const taskId = request.params.taskId
+const taskId = request.params.taskId
 
 const query = "DELETE FROM postits (postitText, userId, completed) VALUES (?, ?, ?);";
 connection.query(query, function (error, data) {
@@ -62,10 +62,11 @@ connection.query(query, function (error, data) {
 
 
 
-  //const someResponse = { message: `You have issued a delete request for takd Id ${taskId}` }
- // response.json(someResponse);
+  const someResponse = { message: `You have issued a delete request for takd Id ${taskId}` }
+ response.json(someResponse);
 
-//});
+
+});
 
 
 
