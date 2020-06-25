@@ -3,17 +3,18 @@ const serverless = require("serverless-http");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
+
+
+const app = express();
+
+app.use(cors());
+app.use(bodyParser.json());
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: "todolist"
 })
-
-const app = express();
-
-app.use(cors());
-app.use(bodyParser.json());
 
 
 //GET - COMPLETE
@@ -57,19 +58,7 @@ connection.query(query, function (error, data) {
 });
 
 
-  // app.delete("/tasks/:taskId", function(req, res) {
-  //   const query = "DELETE FROM postits WHERE postitId = ?";
-  //   connection.query(query, [req.params.postitId], function(error){
-  //     if (error){
-  //       console.log("Error deleting task", error);
-  //       res.status(500).json({
-  //         error: error
-  //       });
-  //     } else {
-  //       res.sendStatus(201)
-  //     }
-  //   });
-  // });
+  
 
 
 
